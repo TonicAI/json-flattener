@@ -133,7 +133,7 @@ DATABASE=your-database-name
 ENTITY=users
 
 # Optional
-FABRICATE_URI_BASE=http://localhost:3000  # defaults to https://fabricate.mockaroo.com
+FABRICATE_URI_BASE=http://localhost:3000  # defaults to https://fabricate.tonic.ai
 ```
 
 ### Setup Instructions

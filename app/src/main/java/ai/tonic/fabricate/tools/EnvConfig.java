@@ -25,7 +25,7 @@ public class EnvConfig {
      * Gets the Fabricate API URL from FABRICATE_URI_BASE, defaulting to production if not set.
      */
     public String getFabricateApiUrl() {
-        String uriBase = getEnvVar("FABRICATE_URI_BASE", "https://fabricate.mockaroo.com");
+        String uriBase = getEnvVar("FABRICATE_URI_BASE", "https://fabricate.tonic.ai");
         
         // Remove trailing slash if present and append /api/v1
         String cleanBase = uriBase.replaceAll("/$", "");
@@ -114,8 +114,8 @@ public class EnvConfig {
     public void printConfig() {
         System.out.println("Configuration:");
         
-        String uriBase = getEnvVar("FABRICATE_URI_BASE", "https://fabricate.mockaroo.com");
-        boolean isCustomInstance = !uriBase.equals("https://fabricate.mockaroo.com");
+        String uriBase = getEnvVar("FABRICATE_URI_BASE", "https://fabricate.tonic.ai");
+        boolean isCustomInstance = !uriBase.equals("https://fabricate.tonic.ai");
         
         System.out.println("  URI Base: " + uriBase + (isCustomInstance ? " (custom instance)" : " (production)"));
         System.out.println("  API URL: " + getFabricateApiUrl());

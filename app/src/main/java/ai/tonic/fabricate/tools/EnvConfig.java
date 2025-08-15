@@ -66,10 +66,14 @@ public class EnvConfig {
     }
     
     /**
-     * Gets the entity/table name (optional).
+     * Gets the entity/table name (required).
      */
     public String getEntity() {
-        return getEnvVar("ENTITY");
+        String entity = getEnvVar("ENTITY");
+        if (entity == null || entity.trim().isEmpty()) {
+            throw new IllegalStateException("ENTITY environment variable is required");
+        }
+        return entity;
     }
     
     /**
@@ -87,6 +91,7 @@ public class EnvConfig {
         getFabricateApiKey();
         getWorkspace();
         getDatabase();
+        getEntity();
     }
     
     /**
@@ -116,7 +121,7 @@ public class EnvConfig {
         System.out.println("  API URL: " + getFabricateApiUrl());
         System.out.println("  Workspace: " + getWorkspace());
         System.out.println("  Database: " + getDatabase());
-        System.out.println("  Entity: " + (getEntity() != null ? getEntity() : "all entities"));
+        System.out.println("  Entity: " + getEntity());
         System.out.println("  Format: " + getFormat());
         System.out.println("  API Key: " + (getFabricateApiKey().length() > 10 ? 
             getFabricateApiKey().substring(0, 10) + "..." : "***"));

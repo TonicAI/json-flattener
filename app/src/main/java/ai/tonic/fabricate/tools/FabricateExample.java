@@ -19,14 +19,8 @@ public class FabricateExample {
             config.validate();
             config.printConfig();
             
-            // Allow entity override from command line
-            String entity = args.length > 0 ? args[0] : config.getEntity();
-            if (entity == null || entity.trim().isEmpty()) {
-                System.err.println("Error: ENTITY must be provided either as environment variable or command line argument");
-                System.err.println("Usage: java FabricateExample [entity-name]");
-                System.err.println("Or set ENTITY in environment variables/.env file");
-                System.exit(1);
-            }
+            // Get entity from environment configuration
+            String entity = config.getEntity();
             
             String outputPath = String.format("data/%s.jsonl", entity);
             

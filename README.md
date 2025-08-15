@@ -88,7 +88,7 @@ Output:
 
 ```bash
 # Set up .env file first (see Configuration section)
-./gradlew runFabricate -Pargs="users"
+./gradlew runFabricate
 ```
 
 ## Usage
@@ -119,9 +119,6 @@ Generate synthetic data via Fabricate API and automatically flatten it:
 ```bash
 # Uses entity from .env file
 ./gradlew runFabricate
-
-# Override entity via command line
-./gradlew runFabricate -Pargs="customers"
 ```
 
 This mode requires:
@@ -145,10 +142,10 @@ Create a `.env` file in the project root or set these environment variables:
 FABRICATE_API_KEY=sk-your-api-key-here
 WORKSPACE=your-workspace-name
 DATABASE=your-database-name
+ENTITY=users
 
 # Optional
 FABRICATE_URI_BASE=http://localhost:3000  # defaults to https://fabricate.mockaroo.com
-ENTITY=users                              # can be provided via command line
 ```
 
 ### Setup Instructions
@@ -171,11 +168,7 @@ ENTITY=users                              # can be provided via command line
 3. **Run the Fabricate integration:**
 
    ```bash
-   # Uses ENTITY from .env
    ./gradlew runFabricate
-
-   # Override entity via command line
-   ./gradlew runFabricate -Pargs="orders"
    ```
 
 ### Local Development (Mode 2)

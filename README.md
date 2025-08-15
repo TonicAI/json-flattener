@@ -12,18 +12,6 @@ Process existing JSONL (JSON Lines) files on your filesystem.
 
 Connect to Fabricate API to generate synthetic data, then automatically flatten it.
 
-## Features
-
-- **Dual Operation Modes**: Transform local files OR generate data via Fabricate API
-- **JSONL Processing**: Reads JSONL files line by line
-- **Intelligent Flattening**: Converts nested JSON objects and arrays to flat structures
-- **Structure Markers**: Adds detailed markers to indicate object and array boundaries
-- **Dot Notation**: Supports nested objects (e.g., `location.city`)
-- **Array Indexing**: Handles arrays with indexing (e.g., `nicknames[0]`, `nicknames[1]`)
-- **Unique IDs**: Generates unique identifiers for each flattened record
-- **Environment Configuration**: Easy setup with `.env` files
-- **Local Development**: Support for local Fabricate instances
-
 ## Output Format
 
 The tool converts JSON data into a structured format with the following markers:
@@ -171,42 +159,6 @@ FABRICATE_URI_BASE=http://localhost:3000  # defaults to https://fabricate.mockar
    ./gradlew runFabricate
    ```
 
-### Local Development (Mode 2)
-
-For testing **Mode 2** against a local Fabricate instance:
-
-1. **Set the URI base in your `.env` file:**
-
-   ```bash
-   FABRICATE_URI_BASE=http://localhost:3000
-   ```
-
-2. **The application automatically appends `/api/v1`** to create the full API URL
-3. **If not set, defaults to production:** `https://fabricate.mockaroo.com`
-
-Example local configuration:
-
-```bash
-FABRICATE_URI_BASE=http://localhost:3000
-FABRICATE_API_KEY=your-local-api-key
-WORKSPACE=local-workspace
-DATABASE=test-database
-ENTITY=users
-```
-
-### Using Gradle (if installed globally)
-
-1. **Build the project:**
-
-   ```bash
-   gradle build
-   ```
-
-2. **Run the application:**
-   ```bash
-   gradle run --args="path/to/your/file.jsonl"
-   ```
-
 ## Project Structure
 
 ```
@@ -257,11 +209,3 @@ The application expects JSONL (JSON Lines) format where each line contains a val
 - `processJsonlFile()`: Reads and processes JSONL files
 - `flattenJsonNode()`: Converts JSON nodes to flattened structure
 - `flattenNode()`: Recursively processes nested objects and arrays
-
-## Error Handling
-
-The application will display error messages for:
-
-- File not found
-- Invalid JSON syntax
-- IO errors during file reading

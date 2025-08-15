@@ -1,15 +1,28 @@
-# JSON Flattening Tool
+# Ostia - JSON Flattening Tool
 
-A Java application that reads JSONL (JSON Lines) files and converts nested JSON structures into a flat representation with detailed structure markers.
+A Java application that converts nested JSON structures into a flat representation with detailed structure markers.
+
+## Two Modes of Operation
+
+### Mode 1: Transform Local Files
+
+Process existing JSONL (JSON Lines) files on your filesystem.
+
+### Mode 2: Generate & Transform with Fabricate
+
+Connect to Fabricate API to generate synthetic data, then automatically flatten it.
 
 ## Features
 
-- Reads JSONL files line by line
-- Flattens nested JSON objects and arrays
-- Adds structure markers to indicate object and array boundaries
-- Supports dot notation for nested objects (e.g., `location.city`)
-- Supports array indexing (e.g., `nicknames[0]`, `nicknames[1]`)
-- Outputs structured data with begin/end markers for objects and arrays
+- **Dual Operation Modes**: Transform local files OR generate data via Fabricate API
+- **JSONL Processing**: Reads JSONL files line by line
+- **Intelligent Flattening**: Converts nested JSON objects and arrays to flat structures
+- **Structure Markers**: Adds detailed markers to indicate object and array boundaries
+- **Dot Notation**: Supports nested objects (e.g., `location.city`)
+- **Array Indexing**: Handles arrays with indexing (e.g., `nicknames[0]`, `nicknames[1]`)
+- **Unique IDs**: Generates unique identifiers for each flattened record
+- **Environment Configuration**: Easy setup with `.env` files
+- **Local Development**: Support for local Fabricate instances
 
 ## Output Format
 
@@ -50,25 +63,143 @@ Output:
 ]
 ```
 
-## Prerequisites
+## Getting Started
+
+### Prerequisites
 
 - Java 17 or later
 - Gradle (or use the included Gradle wrapper)
 
-## Building and Running
+### Build the Project
 
-### Using Gradle Wrapper (Recommended)
+```bash
+./gradlew build
+```
 
-1. **Build the project:**
+## Quick Start
+
+**Transform a local file:**
+
+```bash
+./gradlew run --args="path/to/file.jsonl"
+```
+
+**Generate data with Fabricate:**
+
+```bash
+# Set up .env file first (see Configuration section)
+./gradlew runFabricate -Pargs="users"
+```
+
+## Usage
+
+### Mode 1: Transform Local Files
+
+Process existing JSONL files on your filesystem:
+
+```bash
+./gradlew run --args="path/to/your/file.jsonl"
+```
+
+**Example:**
+
+```bash
+./gradlew run --args="/Users/john/data/customers.jsonl"
+```
+
+This mode requires:
+
+- ✅ A valid JSONL file path
+- ❌ No Fabricate API configuration needed
+
+### Mode 2: Generate & Transform with Fabricate
+
+Generate synthetic data via Fabricate API and automatically flatten it:
+
+```bash
+# Uses entity from .env file
+./gradlew runFabricate
+
+# Override entity via command line
+./gradlew runFabricate -Pargs="customers"
+```
+
+This mode requires:
+
+- ✅ Fabricate API configuration (see Configuration section below)
+- ✅ Valid API key and workspace access
+- ❌ No local files needed
+
+## Configuration (Mode 2 Only)
+
+⚠️ **Note**: Configuration is only required for **Mode 2** (Fabricate API integration). **Mode 1** (local file processing) doesn't need any configuration.
+
+The application supports loading configuration from environment variables or a `.env` file for Fabricate API integration.
+
+### Environment Variables
+
+Create a `.env` file in the project root or set these environment variables:
+
+```bash
+# Required
+FABRICATE_API_KEY=sk-your-api-key-here
+WORKSPACE=your-workspace-name
+DATABASE=your-database-name
+
+# Optional
+FABRICATE_URI_BASE=http://localhost:3000  # defaults to https://fabricate.mockaroo.com
+ENTITY=users                              # can be provided via command line
+```
+
+### Setup Instructions
+
+1. **Copy the example configuration:**
 
    ```bash
-   ./gradlew build
+   cp env.example .env
    ```
 
-2. **Run:**
+2. **Edit `.env` with your actual values:**
+
    ```bash
-   ./gradlew run --args="path/to/your/file.jsonl"
+   FABRICATE_API_KEY=sk-abc123xyz...
+   WORKSPACE=my-workspace
+   DATABASE=my-database
+   ENTITY=users
    ```
+
+3. **Run the Fabricate integration:**
+
+   ```bash
+   # Uses ENTITY from .env
+   ./gradlew runFabricate
+
+   # Override entity via command line
+   ./gradlew runFabricate -Pargs="orders"
+   ```
+
+### Local Development (Mode 2)
+
+For testing **Mode 2** against a local Fabricate instance:
+
+1. **Set the URI base in your `.env` file:**
+
+   ```bash
+   FABRICATE_URI_BASE=http://localhost:3000
+   ```
+
+2. **The application automatically appends `/api/v1`** to create the full API URL
+3. **If not set, defaults to production:** `https://fabricate.mockaroo.com`
+
+Example local configuration:
+
+```bash
+FABRICATE_URI_BASE=http://localhost:3000
+FABRICATE_API_KEY=your-local-api-key
+WORKSPACE=local-workspace
+DATABASE=test-database
+ENTITY=users
+```
 
 ### Using Gradle (if installed globally)
 
@@ -104,6 +235,8 @@ Output:
 ## Dependencies
 
 - **Jackson Databind**: For JSON parsing and processing
+- **OkHttp**: HTTP client for Fabricate API calls
+- **Dotenv Java**: Environment variable loading from .env files
 - **JUnit**: For testing (test framework)
 - **Guava**: Utility libraries
 
@@ -118,12 +251,18 @@ The application expects JSONL (JSON Lines) format where each line contains a val
 
 ## Development
 
-To add new features or modify the flattening logic, edit the `App.java` file in `app/src/main/java/ai/tonic/fabricate/tools/`.
+### Core Components
 
-Key methods:
+- **`App.java`**: Mode 1 entry point (local file processing)
+- **`FabricateExample.java`**: Mode 2 entry point (Fabricate API integration)
+- **`JsonFlattener.java`**: Core flattening logic (used by both modes)
+- **`FabricateClient.java`**: Fabricate API communication (Mode 2 only)
+- **`EnvConfig.java`**: Environment configuration (Mode 2 only)
 
-- `processJsonlFile()`: Reads and processes the JSONL file
-- `flattenJsonNode()`: Converts a JSON node to the flattened structure
+### Key Methods (JsonFlattener)
+
+- `processJsonlFile()`: Reads and processes JSONL files
+- `flattenJsonNode()`: Converts JSON nodes to flattened structure
 - `flattenNode()`: Recursively processes nested objects and arrays
 
 ## Error Handling

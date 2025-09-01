@@ -11,9 +11,9 @@ public class EnvConfig {
     
     public EnvConfig() {
         // Load .env file if it exists, otherwise use system environment
-        // Look for .env file in parent directory (project root) if not found in current directory
+        // Look for .env file in the current directory (project root)
         this.dotenv = Dotenv.configure()
-                .directory("../")  // Look in parent directory first
+                .directory("./")  // Look in current directory (project root)
                 .ignoreIfMalformed()
                 .ignoreIfMissing()
                 .load();

@@ -56,12 +56,34 @@ Output:
 ### Prerequisites
 
 - Java 17 or later
-- Gradle (or use the included Gradle wrapper)
+- Maven 3.6 or later
 
 ### Build the Project
 
 ```bash
-./gradlew build
+mvn clean compile
+```
+
+### Package the Application
+
+Create a JAR file with all dependencies:
+
+```bash
+mvn clean package
+```
+
+### Run Tests
+
+```bash
+mvn test
+```
+
+### Run the Packaged JAR
+
+After building, you can also run the application directly from the JAR file:
+
+```bash
+java -jar target/json-flattener-1.0.0.jar path/to/file.jsonl
 ```
 
 ## Quick Start
@@ -69,14 +91,17 @@ Output:
 **Transform a local file:**
 
 ```bash
-./gradlew run --args="path/to/file.jsonl"
+mvn exec:java -Dexec.mainClass="ai.tonic.fabricate.tools.App" -Dexec.args="path/to/file.jsonl"
+
+# Or using the shorter command:
+mvn exec:java -Dexec.args="path/to/file.jsonl"
 ```
 
 **Generate data with Fabricate:**
 
 ```bash
 # Set up .env file first (see Configuration section)
-./gradlew runFabricate
+mvn exec:java -Pfabricate
 ```
 
 ## Usage
@@ -86,13 +111,16 @@ Output:
 Process existing JSONL files on your filesystem:
 
 ```bash
-./gradlew run --args="path/to/your/file.jsonl"
+mvn exec:java -Dexec.mainClass="ai.tonic.fabricate.tools.App" -Dexec.args="path/to/your/file.jsonl"
+
+# Or using the shorter command:
+mvn exec:java -Dexec.args="path/to/your/file.jsonl"
 ```
 
 **Example:**
 
 ```bash
-./gradlew run --args="/Users/john/data/customers.jsonl"
+mvn exec:java -Dexec.args="/Users/john/data/customers.jsonl"
 ```
 
 This mode requires:
@@ -106,7 +134,7 @@ Generate synthetic data via Fabricate API and automatically flatten it:
 
 ```bash
 # Uses entity from .env file
-./gradlew runFabricate
+mvn exec:java -Pfabricate
 ```
 
 This mode requires:
@@ -156,24 +184,23 @@ FABRICATE_URI_BASE=http://localhost:3000  # defaults to https://fabricate.tonic.
 3. **Run the Fabricate integration:**
 
    ```bash
-   ./gradlew runFabricate
+   mvn exec:java -Pfabricate
    ```
 
 ## Project Structure
 
 ```
 <root>/
-├── app/
-│   ├── src/main/java/ai/tonic/fabricate/tools/
-│   │   └── App.java              # Main application logic
-│   └── build.gradle              # App dependencies and configuration
+├── src/main/java/ai/tonic/fabricate/tools/
+│   ├── App.java                  # Main application logic (Mode 1)
+│   ├── FabricateExample.java     # Fabricate integration (Mode 2)
+│   ├── JsonFlattener.java        # Core flattening logic
+│   ├── FabricateClient.java      # Fabricate API client
+│   └── EnvConfig.java            # Environment configuration
 ├── data/
 │   └── example.jsonl             # Sample input file
-├── gradle/
-│   └── wrapper/                  # Gradle wrapper files
-├── gradlew                       # Gradle wrapper script (Unix)
-├── gradlew.bat                   # Gradle wrapper script (Windows)
-├── settings.gradle               # Project settings
+├── target/                       # Maven build directory
+├── pom.xml                       # Maven project configuration
 └── README.md                     # This file
 ```
 

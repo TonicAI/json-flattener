@@ -1,0 +1,6 @@
+ai/tonic/fabricate/tools/App.class
+ai/tonic/fabricate/tools/FabricateClient.class
+ai/tonic/fabricate/tools/EnvConfig.class
+ai/tonic/fabricate/tools/FabricateExample.class
+ai/tonic/fabricate/tools/FabricateClient$GenerateTaskResult.class
+ai/tonic/fabricate/tools/JsonFlattener.class
